@@ -48,6 +48,7 @@ pub struct LockId (pub String);
 #[derive(Debug , Clone , PartialEq)]
 pub struct LeaseId (pub String);
 
+
 #[derive(Debug , Clone)]
 pub enum AcquireResult{
     Granted {
@@ -83,5 +84,7 @@ pub trait LockManager : Send + Sync  {
     fn release (&self , lock_id : &LockId , client_id : &ClientId , lease_id : &LeaseId ) -> ReleaseResult ;
     fn renew (&self , lock_id : &LockId , client_id : &ClientId , lease_id : &LeaseId ,ttl: Duration ) ->RenewResult ;
     fn status(&self , lock_id : &LockId ) -> Option<LockState>;
+    fn current_holder(&self , lock_id : &LockId) -> Option<ClientId>;
+    fn queue_length(&self , lock_id : &LockId) -> usize;
 
 }

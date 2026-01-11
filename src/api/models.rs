@@ -51,7 +51,9 @@ pub struct RenewRequest{
 
 #[derive(Serialize , Debug)]
 pub enum RenewResponse{
-    Success ,
+    Success{
+        new_expiry : String
+    } ,
      Error{
         error_type: String,
         message: String,
@@ -67,7 +69,8 @@ pub enum StatusResponse{
         created_at : String , 
 
     } ,
-    Free
+    Free, 
+    NotFound
 }
 
 #[derive(Serialize , Debug)]

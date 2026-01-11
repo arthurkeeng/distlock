@@ -137,10 +137,30 @@ impl LockManager for InMemoryLockManager{
     }
 }
 fn status(&self , lock_id : &LockId ) -> Option<LockState> {
+
     let locks = self.locks.read().unwrap();
     let lock_state = locks.get(lock_id).cloned();
     lock_state
 
         
     }
+
+
+    fn current_holder(&self , lock_id : &LockId) -> Option<ClientId> {
+    let locks = self.locks.read().unwrap();
+
+    locks.get(&lock_id).and_then(|state| state.holder.as_ref()).map(|holder|holder.client_id.clone())
+
+}
+fn queue_length(&self , lock_id : &LockId) -> usize {
+    let locks = self.locks.read().unwrap();
+
+    match locks.get(&lock_id){
+        Some(state) => {return state.wait_queue.len()},
+        None => return 0
+    };
+}
+
+
+
 }
